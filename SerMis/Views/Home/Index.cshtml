@@ -1,0 +1,49 @@
+﻿@{
+    ViewData["Title"] = "Home Page";
+}
+
+<form asp-action="Index" method="post">
+    <label for="name">Enter Name</label>
+    <input type="text" id="name" name="name" required />
+    <button type="submit">Go</button>
+</form>
+
+<div id="tabs">
+    <ul></ul>
+</div>
+
+@section scripts {
+    @if (ViewBag.UserId != null)
+    {
+        <script>
+            $(function () {
+                var userId = @ViewBag.UserId;
+
+                if ($("#tabs").find("#" + userId).length === 0) {
+                    $("#tabs ul").append('<li><a href="#' + userId + '">@(ViewBag.UserName)-City</a></li>');
+                    $("#tabs").append('<div id="' + userId + '"><label for="city">Enter City</label><input type="text" id="city" data-userid="' + userId + '" value="@(ViewBag.City)" /></div>');
+
+                    $("#tabs ul").append('<li><a href="#' + userId + '-age">@(ViewBag.UserName)-Age</a></li>');
+                    $("#tabs").append('<div id="' + userId + '-age"><label for="age">Enter Age</label><input type="number" id="age" data-userid="' + userId + '" value="@(ViewBag.Age)"/></div>');
+
+                    $("#tabs").tabs("refresh");
+                }
+                $("#tabs").tabs("option", "active", $("#tabs").find("div").index($("#" + userId)));
+            });
+        </script>
+    }
+
+    <script>
+        $(document).on("blur", "input[data-userid]", function () {
+            var userId = $(this).data("userid");
+            var field = $(this).attr("id");
+            var value = $(this).val();
+
+            $.post("@Url.Action("UpdateUserInfo")", { userId: userId, field: field, value: value }, function (data) {
+                console.log(data);
+            });
+        });
+
+        $("#tabs").tabs();
+    </script>
+}
