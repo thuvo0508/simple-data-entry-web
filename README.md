@@ -1,4 +1,4 @@
-# Simple data entry web using ASP.NET Core MVC, Entity Framework Core, MS SQL Server
+# Simple data entry web using .NET Core 7, Entity Framework Core, MS SQL Server
 1. Input the user's Name and click Go.
 2. Two tabs for City and Age will appear for data input.
 
